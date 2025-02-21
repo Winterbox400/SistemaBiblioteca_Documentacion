@@ -1,0 +1,20 @@
+Tabla Tipos --> Entrada, Salida, Prestamo.
+
+Tabla Concepto --> Compra de Libros, Donación de Libros, Destrucción del libro, Etc.
+
+Campo estado Tabla Prestamo --> Lleva el control si un lib
+
+DAL - Data Access Layer (Capa de Datos)
+ET  - Model Layer Entity
+BLL - Business Logic Layer (Capa de Negocio)
+GUI - Graphical User Interface
+
+
+Ramas y su funcionalidad dentro del repositorio
+
+Main -> Estable y lista para producción.
+Develop -> Rama base donde se integran los cambios antes de fusionarlos a main.
+Feature branches -> Implementación de nuevas funcionalidades.
+Bugfix branches -> Solución de errores.
+Release branches -> Preparación para el lanzamiento.
+Hotfix branches -> Correciones urgentes en producción.
