@@ -1,0 +1,98 @@
+/*Procedimiento Almacenados Editoriales*/
+
+/*Referencia de Tabla Editoriales*/
+--CREATE TABLE Editoriales(
+--	IdEditorial INT PRIMARY KEY IDENTITY,
+--	Nombre VARCHAR(50) NOT NULL,
+--	Activo BIT NOT NULL DEFAULT 1
+--)
+--GO
+
+USE BD_ControlBiblioteca
+GO
+
+/*Insertar una nueva Editorial*/
+CREATE PROCEDURE InsertEditorial
+@Nombre VARCHAR(50)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO Editoriales(Nombre)
+				VALUES(@Nombre)
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		PRINT ERROR_MESSAGE();
+
+		IF XACT_STATE() = 1
+		BEGIN
+			ROLLBACK TRANSACTION;
+		END
+		ELSE IF XACT_STATE() = -1
+		BEGIN
+			ROLLBACK TRANSACTION;
+		END;
+		THROW
+	END CATCH
+END
+GO
+
+/*Cambiar una Editorial*/
+CREATE PROCEDURE UpdateEditorial
+@Nombre VARCHAR(50),
+@IdEditorial INT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			UPDATE Editoriales
+			SET Nombre = @Nombre
+			WHERE IdEditorial = @IdEditorial AND Activo = 1;
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		PRINT ERROR_MESSAGE();
+
+		IF XACT_STATE() = 1
+		BEGIN
+			ROLLBACK TRANSACTION;
+		END
+		ELSE IF XACT_STATE() = -1
+		BEGIN
+			ROLLBACK TRANSACTION;
+		END;
+		THROW
+	END CATCH
+END
+GO
+
+/*Eliminar una Editorial*/
+CREATE PROCEDURE DeleteEditorial
+@IdEditorial INT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			UPDATE Editoriales
+			SET Activo = 0
+			WHERE IdEditorial = @IdEditorial AND Activo = 1;
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		PRINT ERROR_MESSAGE();
+
+		IF XACT_STATE() = 1
+		BEGIN
+			ROLLBACK TRANSACTION;
+		END
+		ELSE IF XACT_STATE() = -1
+		BEGIN
+			ROLLBACK TRANSACTION;
+		END;
+		THROW
+	END CATCH
+END

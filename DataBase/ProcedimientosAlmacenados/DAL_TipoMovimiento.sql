@@ -1,0 +1,96 @@
+/*Procedimiento Almacenados Libros*/
+
+/*Referencia de Tabla Libros*/
+--CREATE TABLE TipoMovimientos(
+--	IdTipoMovimiento INT PRIMARY KEY IDENTITY,
+--	Tipo VARCHAR(10) NOT NULL,
+--	Activo BIT DEFAULT 1 NOT NULL
+--)
+--GO
+
+USE BD_ControlBiblioteca
+GO
+
+/*Insertar un Tipo de Movimiento*/
+CREATE PROCEDURE InsertTipoMovimiento
+@Tipo VARCHAR(10)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO TipoMovimientos(Tipo)
+				VALUES(@Tipo)
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		PRINT ERROR_MESSAGE();
+		IF XACT_STATE() = 1
+		BEGIN
+			ROLLBACK TRANSACTION;
+		END
+		ELSE IF XACT_STATE() = -1
+		BEGIN
+			ROLLBACK TRANSACTION;
+		END;
+		THROW
+	END CATCH
+END
+GO
+
+/*Cambiar un Tipo de Movimiento*/
+CREATE PROCEDURE UpdateTipoMovimiento
+@IdTipo INT,
+@Tipo VARCHAR(10)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			UPDATE TipoMovimientos
+				SET Tipo = @Tipo
+				WHERE IdTipoMovimiento = @IdTipo AND Activo = 1;
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		PRINT ERROR_MESSAGE();
+		IF XACT_STATE() = 1
+		BEGIN
+			ROLLBACK TRANSACTION;
+		END
+		ELSE IF XACT_STATE() = -1
+		BEGIN
+			ROLLBACK TRANSACTION;
+		END;
+		THROW
+	END CATCH
+END
+GO
+
+/*Eliminar un Tipo de Movimiento*/
+CREATE PROCEDURE DeleteTipoMovimiento
+@IdTipo INT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			UPDATE TipoMovimientos
+				SET Activo = 0
+				WHERE IdTipoMovimiento = @IdTipo AND Activo = 1;
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		PRINT ERROR_MESSAGE();
+		IF XACT_STATE() = 1
+		BEGIN
+			ROLLBACK TRANSACTION;
+		END
+		ELSE IF XACT_STATE() = -1
+		BEGIN
+			ROLLBACK TRANSACTION;
+		END;
+		THROW
+	END CATCH
+END
+GO
